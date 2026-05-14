@@ -1,7 +1,9 @@
 module.exports = async function handler(req, res) {
+  // Set CORS first — always, before anything else
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-apisports-key");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Content-Type", "application/json");
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();
@@ -16,7 +18,6 @@ module.exports = async function handler(req, res) {
     });
 
     const text = await apiRes.text();
-    res.setHeader("Content-Type", "application/json");
     res.status(200).send(text);
   } catch (e) {
     res.status(500).json({ error: e.message });
