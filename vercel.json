@@ -8,8 +8,5 @@
         { "key": "Access-Control-Allow-Headers", "value": "*" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/api/proxy/:path*", "destination": "/api/proxy" }
   ]
 }
