@@ -1,18 +1,20 @@
-const https = require('https');
-
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   
-  const ipRes = await fetch("https://api4.ipify.org?format=json");
-  const ipData = await ipRes.json();
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
+  const path = req.url.replace('/api/proxy', '') || '/status';
+  const url = `https://v3.football.api-sports.io${path}`;
   
-  const apiRes = await fetch("https://v3.football.api-sports.io/status", {
+  const response = await fetch(url, {
     headers: { "x-apisports-key": "3b9924274be6dec39dede6fc8fd29b70" }
   });
-  const apiData = await apiRes.json();
   
-  res.json({ 
-    vercelOutboundIP: ipData.ip,
-    apiResponse: apiData
-  });
+  const data = await response.text();
+  res.status(200).send(data);
 }
